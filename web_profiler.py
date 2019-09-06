@@ -10,7 +10,7 @@ import json
 import socket
 import sys
 import time
-import urlparse
+from urllib.parse import urlparse
 import xml.etree.ElementTree as etree
 from datetime import datetime
 
@@ -20,17 +20,17 @@ from selenium import selenium
 
 def main():
     if len(sys.argv) < 2:
-        print 'usage:'
-        print '  %s <url> [browser_launcher]' % __file__
-        print 'examples:'
-        print '  $ python %s www.google.com' % __file__
-        print '  $ python %s http://www.google.com/ *firefox\n' % __file__
+        print ('usage:')
+        print ('  %s <url> [browser_launcher]' % __file__)
+        print ('examples:')
+        print ('  $ python %s www.google.com' % __file__)
+        print ('  $ python %s http://www.google.com/ *firefox\n' % __file__)
         sys.exit(1)
     else:
         url = sys.argv[1]
         if not url.startswith('http'):
             url = 'http://' + url
-        parsed_url = urlparse.urlparse(url)
+        parsed_url = urlparse(url)
         site = parsed_url.scheme + '://' + parsed_url.netloc
         path = parsed_url.path
         if path == '':
@@ -50,7 +50,7 @@ def run(site, path, browser):
     try:
         sel.start('captureNetworkTraffic=true')
     except socket.error:
-        print 'ERROR - can not start the selenium-rc driver. is your selenium server running?'
+        print ('ERROR - can not start the selenium-rc driver. is your selenium server running?')
         sys.exit(1)
         
     sel.open(path)
@@ -78,27 +78,27 @@ def run(site, path, browser):
     end_last_request_elapsed = get_elapsed_secs(start_first_request, end_last_request)
     end_first_request_elapsed = get_elapsed_secs(start_first_request, end_first_request)
     
-    print '--------------------------------'
-    print 'results for %s' % site
+    print ('--------------------------------')
+    print ('results for %s' % site)
     
-    print '\ncontent size: %s kb' % total_size
+    print ('\ncontent size: %s kb' % total_size)
     
-    print '\nhttp requests: %s' % num_requests
+    print ('\nhttp requests: %s' % num_requests)
     for k,v in sorted(status_map.items()):
-        print 'status %s: %s' % (k, v)
+        print ('status %s: %s' % (k, v))
     
-    print '\nprofiler timing:'
-    print '%.3f secs (page load)' % end_load_elapsed
-    print '%.3f secs (network: end last request)' % end_last_request_elapsed
-    print '%.3f secs (network: end first request)' % end_first_request_elapsed
+    print ('\nprofiler timing:')
+    print ('%.3f secs (page load)' % end_load_elapsed)
+    print ('%.3f secs (network: end last request)' % end_last_request_elapsed)
+    print ('%.3f secs (network: end first request)' % end_first_request_elapsed)
     
-    print '\nfile extensions: (count, size)'
+    print ('\nfile extensions: (count, size)')
     for k,v in sorted(file_extension_map.items()):
-        print '%s: %i, %.3f kb' % (k, v[0], v[1])
+        print ('%s: %i, %.3f kb' % (k, v[0], v[1]))
         
-    print '\nhttp timing detail: (status, method, doc, size, time)'
+    print ('\nhttp timing detail: (status, method, doc, size, time)')
     for details in http_details:
-        print '%i, %s, %s, %i, %i ms' % (details[0], details[1], details[2], details[3], details[4])
+        print ('%i, %s, %s, %i, %i ms' % (details[0], details[1], details[2], details[3], details[4]))
 
   
   
